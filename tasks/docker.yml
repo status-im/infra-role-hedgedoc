@@ -24,10 +24,8 @@
     mode: 0640
 
 - name: CodiMD | Create containers
-  docker_compose:
+  community.docker.docker_compose_v2:
     project_src: '{{ codimd_service_path }}'
-    pull: true
-    build: false
-    state: '{{ compose_state }}'
-    restarted: '{{ compose_restart }}'
-    recreate: '{{ compose_recreate | default("smart") }}'
+    recreate:    '{{ compose_recreate }}'
+    pull:        '{{ compose_pull }}'
+    state:       '{{ compose_state }}'

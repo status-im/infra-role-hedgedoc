@@ -54,6 +54,6 @@ codimd_s3_endpoint: ~
 #codimd_gh_oauth_orgs: []
 
 # general container management
-compose_recreate: 'smart'
+compose_recreate: 'auto'
 compose_state: 'present'
-compose_restart: false
+compose_pull: 'always'
