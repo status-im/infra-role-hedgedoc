@@ -9,8 +9,8 @@ codimd_debug: false
 
 # App --------------------------------------------------------------------------
 codimd_app_cont_name: '{{ codimd_service_name }}-app'
-codimd_app_cont_tag: '2.4.2-1'
-codimd_app_cont_image: 'statusteam/hackmd:{{ codimd_app_cont_tag }}'
+codimd_app_cont_tag: '2.5.4'
+codimd_app_cont_image: 'hackmdio/hackmd:{{ codimd_app_cont_tag }}'
 codimd_app_cont_port: 3001
 codimd_app_cont_vol: '{{ codimd_service_path }}/app'
 codimd_app_cont_uploads: '{{ codimd_app_cont_vol }}/uploads'
