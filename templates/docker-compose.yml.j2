@@ -66,6 +66,8 @@ services:
       POSTGRES_PASSWORD: '{{ codimd_db_pass }}'
       # This fixes chmod errors on DB startup due to volume + userns-remap
       PGDATA: '/var/lib/postgresql/data/pgdata'
+    command: |
+      -p {{ codimd_db_cont_port }}
     ports:
       - '{{ codimd_db_cont_port }}:{{ codimd_db_cont_port }}'
     tmpfs:

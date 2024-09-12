@@ -14,6 +14,9 @@
       BKP_DIR="{{ codimd_db_cont_vol }}/backup/{{ codimd_db_name }}"
       rm -vfr "${BKP_DIR}"
       /usr/bin/docker exec -i {{ codimd_db_cont_name }} \
-        pg_dump -F directory -f "/backup/{{ codimd_db_name }}" \
-        -U {{ codimd_db_user }} {{ codimd_db_name }}
+        pg_dump \
+          -F directory \
+          -f "/backup/{{ codimd_db_name }}" \
+          -p {{ codimd_db_cont_port }} \
+          -U {{ codimd_db_user }} {{ codimd_db_name }}
       chmod 750 -R "${BKP_DIR}"
