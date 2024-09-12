@@ -1,0 +1,45 @@
+---
+- name: HackMD | Configure nginx proxy
+  include_role: name=infra-role-nginx
+  vars:
+    nginx_configs:
+      hackmd_rate_limiting:
+        # Limit requests to 40 per minute based on IP
+        - limit_req_zone $binary_remote_addr zone=hackmd_by_ip:20m rate=40r/m
+    nginx_sites:
+      hackmd_http:
+        - listen 80
+        - server_name {{ hackmd_domain }}
+        - return 301 https://{{ hackmd_domain }}$request_uri
+
+      hackmd_ssl:
+        - listen 443 ssl
+        - server_name {{ hackmd_domain }}
+
+        - ssl_certificate     /certs/origin.crt
+        - ssl_certificate_key /certs/origin.key
+
+        - proxy_set_header X-Frame-Options sameorigin
+
+        # Script kiddies like scanning paths, so we rate limit most.
+        - location / {
+            limit_req zone=hackmd_by_ip burst=30 nodelay;
+            proxy_pass http://localhost:{{ hackmd_app_cont_port }}/;
+            proxy_set_header X-NginX-Proxy true;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Host $host;
+            proxy_http_version 1.1;
+            proxy_redirect off;
+          }
+
+        # This path is used when editing so we can't rate limit it easily.
+        - location ~ ^/(socket.io|config|me) {
+            proxy_pass http://localhost:{{ hackmd_app_cont_port }};
+            proxy_set_header X-NginX-Proxy true;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Host $host;
+            proxy_http_version 1.1;
+            proxy_redirect off;
+          }

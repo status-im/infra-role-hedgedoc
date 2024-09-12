@@ -1,0 +1,14 @@
+---
+- name: HackMD | Enable HTTP & HTTPS ports
+  iptables:
+    comment: '{{ hackmd_service_name }}'
+    chain: INPUT
+    jump: ACCEPT
+    source: '0.0.0.0/0'
+    protocol: 'tcp'
+    destination_port: '{{ item | int }}'
+  with_items:
+    - 80
+    - 443
+  notify:
+    - Save iptables rules

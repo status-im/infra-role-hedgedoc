@@ -1,0 +1,15 @@
+---
+- name: HackMD | Create Consul service definition
+  include_role: name=infra-role-consul-service
+  vars:
+    consul_config_name: '{{ hackmd_service_name }}'
+    consul_services:
+      - name: '{{ hackmd_service_name }}'
+        tags: ['hackmd', 'notes', 'misc']
+        # we advertise the port with basic auth
+        port: '{{ hackmd_app_cont_port }}'
+        checks:
+          - id: '{{ hackmd_service_name }}-status'
+            name: HackMD Healthcheck
+            type: http
+            http: 'http://localhost:{{ hackmd_app_cont_port }}/config'

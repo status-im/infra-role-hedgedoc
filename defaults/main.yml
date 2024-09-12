@@ -1,0 +1,59 @@
+---
+hackmd_domain: 'notes.example.org'
+hackmd_service_name: 'hackmd'
+hackmd_service_path: '/docker/{{ hackmd_service_name }}'
+hackmd_service_compose: '{{ hackmd_service_path }}/docker-compose.yml'
+
+# Debug logs
+hackmd_debug: false
+
+# App --------------------------------------------------------------------------
+hackmd_app_cont_name: '{{ hackmd_service_name }}-app'
+hackmd_app_cont_tag: '2.4.2-1'
+hackmd_app_cont_image: 'statusteam/hackmd:{{ hackmd_app_cont_tag }}'
+hackmd_app_cont_port: 3001
+hackmd_app_cont_vol: '{{ hackmd_service_path }}/app'
+hackmd_app_cont_uploads: '{{ hackmd_app_cont_vol }}/uploads'
+hackmd_app_cont_uid: 1500
+hackmd_app_host_uid: '{{ 100000 + hackmd_app_cont_uid | int }}'
+hackmd_session_life: '24h'
+# hackmd_session_secret: 'changeMeIfYouCare'
+
+# DB ---------------------------------------------------------------------------
+hackmd_db_cont_name: '{{ hackmd_service_name }}-db'
+hackmd_db_cont_vol: '{{ hackmd_service_path }}/db'
+hackmd_db_cont_image: 'postgres:9.6-alpine'
+hackmd_db_cont_port: 5432
+hackmd_db_name: 'hackmd'
+hackmd_db_user: 'hackmd'
+hackmd_db_pass: 'changeMeIfYouCare'
+hackmd_db_cont_uid: 70
+hackmd_db_host_uid: '{{ 100000 + hackmd_db_cont_uid | int }}'
+
+# Backups
+hackmd_db_backup_service_name: 'dump-hackmd-db'
+hackmd_db_backup_frequency: daily
+hackmd_db_backup_timeout: 120
+hackmd_db_backup_user: root
+
+# s3 or digital ocean uploads
+# WARNING: This is currently broken.
+hackmd_s3_upload_enabled: false
+hackmd_s3_access_key: ~
+hackmd_s3_secret_key: ~
+hackmd_s3_region: ~
+hackmd_s3_bucket: ~
+hackmd_s3_endpoint: ~
+
+# google oauth
+#hackmd_gg_oauth_id: ~
+#hackmd_gg_oauth_secret: ~
+# github oauth
+#hackmd_gh_oauth_id: ~
+#hackmd_gh_oauth_secret: ~
+#hackmd_gh_oauth_orgs: []
+
+# general container management
+compose_recreate: 'smart'
+compose_state: 'present'
+compose_restart: false
