@@ -1,0 +1,25 @@
+---
+galaxy_info:
+  author: Jakub Sokołowski
+  description: Deploy CodiMD markdown collaboration platform
+  company: Status.im
+  license: MIT
+  min_ansible_version: 2.2
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+        - trusty
+        - xenial
+  categories:
+    - system
+  dependencies:
+    - name: infra-role-nginx
+      src: git+git@github.com:status-im/infra-role-nginx.git
+      scm: git
+    - name: infra-role-consul-service
+      src: git+git@github.com:status-im/infra-role-consul-service.git
+      scm: git
+    - name: infra-role-systemd-timer
+      src: git+git@github.com:status-im/infra-role-systemd-timer.git
+      scm: git
