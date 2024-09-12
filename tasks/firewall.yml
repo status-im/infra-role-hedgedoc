@@ -1,7 +1,7 @@
 ---
-- name: HackMD | Enable HTTP & HTTPS ports
+- name: CodiMD | Enable HTTP & HTTPS ports
   iptables:
-    comment: '{{ hackmd_service_name }}'
+    comment: '{{ codimd_service_name }}'
     chain: INPUT
     jump: ACCEPT
     source: '0.0.0.0/0'

@@ -2,22 +2,22 @@
 version: '3.7'
 services:
   node:
-    container_name: '{{ hackmd_app_cont_name }}'
-    image: '{{ hackmd_app_cont_image }}'
+    container_name: '{{ codimd_app_cont_name }}'
+    image: '{{ codimd_app_cont_image }}'
     restart: always
     ports:
-      - '{{ hackmd_app_cont_port }}:{{ hackmd_app_cont_port }}'
+      - '{{ codimd_app_cont_port }}:{{ codimd_app_cont_port }}'
     volumes:
-      - '{{ hackmd_app_cont_uploads }}:/home/hackmd/app/public/uploads'
+      - '{{ codimd_app_cont_uploads }}:/home/hackmd/app/public/uploads'
     environment:
-      # WARNING: HackMD expects lowercase string booleans!
-      DEBUG: '{{ hackmd_debug | string | lower }}'
-      CMD_LOGLEVEL: '{{ hackmd_debug | ternary("debug", "info") }}'
+      # WARNING: CodiMD expects lowercase string booleans!
+      DEBUG: '{{ codimd_debug | string | lower }}'
+      CMD_LOGLEVEL: '{{ codimd_debug | ternary("debug", "info") }}'
       # Fixes syntax highlighting issues for some languages
       CMD_USECDN: 'false'
-      CMD_PORT: '{{ hackmd_app_cont_port }}'
-      CMD_DB_URL: 'postgres://{{ hackmd_db_user }}:{{ hackmd_db_pass }}@db:{{ hackmd_db_cont_port }}/{{ hackmd_db_name }}'
-      CMD_DOMAIN: '{{ hackmd_domain }}'
+      CMD_PORT: '{{ codimd_app_cont_port }}'
+      CMD_DB_URL: 'postgres://{{ codimd_db_user }}:{{ codimd_db_pass }}@db:{{ codimd_db_cont_port }}/{{ codimd_db_name }}'
+      CMD_DOMAIN: '{{ codimd_domain }}'
       CMD_ALLOW_ORIGIN: 'localhost, status.im'
       CMD_URL_ADDPORT: 'false'
       CMD_PROTOCOL_USESSL: 'true'
@@ -29,53 +29,53 @@ services:
       CMD_ALLOW_ANONYMOUS: 'false'
       CMD_ALLOW_ANONYMOUS_EDITS: 'false'
       CMD_ALLOW_ANONYMOUS_VIEWS: 'true'
-      CMD_GOOGLE_CLIENTID: '{{ hackmd_gg_oauth_id | mandatory }}'
-      CMD_GOOGLE_CLIENTSECRET: '{{ hackmd_gg_oauth_secret | mandatory }}'
-      CMD_GITHUB_CLIENTID: '{{ hackmd_gh_oauth_id | mandatory }}'
-      CMD_GITHUB_CLIENTSECRET: '{{ hackmd_gh_oauth_secret | mandatory }}'
-      CMD_GITHUB_ORGANIZATIONS: '{{ hackmd_gh_oauth_orgs | join(",") | mandatory }}'
-{% if hackmd_s3_upload_enabled %}
+      CMD_GOOGLE_CLIENTID: '{{ codimd_gg_oauth_id | mandatory }}'
+      CMD_GOOGLE_CLIENTSECRET: '{{ codimd_gg_oauth_secret | mandatory }}'
+      CMD_GITHUB_CLIENTID: '{{ codimd_gh_oauth_id | mandatory }}'
+      CMD_GITHUB_CLIENTSECRET: '{{ codimd_gh_oauth_secret | mandatory }}'
+      CMD_GITHUB_ORGANIZATIONS: '{{ codimd_gh_oauth_orgs | join(",") | mandatory }}'
+{% if codimd_s3_upload_enabled %}
       # S3/DO Spaces uploads
       CMD_IMAGE_UPLOAD_TYPE: 's3'
-      CMD_S3_ACCESS_KEY_ID: '{{ hackmd_s3_access_key }}'
-      CMD_S3_SECRET_ACCESS_KEY: '{{ hackmd_s3_secret_key }}'
-      CMD_S3_REGION: '{{ hackmd_s3_region }}'
-      CMD_S3_BUCKET: '{{ hackmd_s3_bucket }}'
-      CMD_S3_ENDPOINT: '{{ hackmd_s3_endpoint }}'
+      CMD_S3_ACCESS_KEY_ID: '{{ codimd_s3_access_key }}'
+      CMD_S3_SECRET_ACCESS_KEY: '{{ codimd_s3_secret_key }}'
+      CMD_S3_REGION: '{{ codimd_s3_region }}'
+      CMD_S3_BUCKET: '{{ codimd_s3_bucket }}'
+      CMD_S3_ENDPOINT: '{{ codimd_s3_endpoint }}'
 {% else %}
       CMD_IMAGE_UPLOAD_TYPE: 'filesystem'
 {% endif %}
-      CMD_SESSION_LIFE: '{{ hackmd_session_life | community.general.to_time_unit('ms') | int}}'
-{% if hackmd_session_secret is defined and hackmd_session_secret %}
-      CMD_SESSION_SECRET: '{{ hackmd_session_secret }}'
+      CMD_SESSION_LIFE: '{{ codimd_session_life | community.general.to_time_unit('ms') | int}}'
+{% if codimd_session_secret is defined and codimd_session_secret %}
+      CMD_SESSION_SECRET: '{{ codimd_session_secret }}'
 {% endif %}
     depends_on:
       - 'db'
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:{{ hackmd_app_cont_port }}/config"]
+      test: ["CMD", "wget", "-qO-", "http://localhost:{{ codimd_app_cont_port }}/config"]
       interval: 30s
       timeout: 10s
       retries: 3
 
   db:
-    container_name: '{{ hackmd_db_cont_name }}'
-    image: '{{ hackmd_db_cont_image }}'
+    container_name: '{{ codimd_db_cont_name }}'
+    image: '{{ codimd_db_cont_image }}'
     restart: always
     environment:
-      POSTGRES_DB:       '{{ hackmd_db_name }}'
-      POSTGRES_USER:     '{{ hackmd_db_user }}'
-      POSTGRES_PASSWORD: '{{ hackmd_db_pass }}'
+      POSTGRES_DB:       '{{ codimd_db_name }}'
+      POSTGRES_USER:     '{{ codimd_db_user }}'
+      POSTGRES_PASSWORD: '{{ codimd_db_pass }}'
       # This fixes chmod errors on DB startup due to volume + userns-remap
       PGDATA: '/var/lib/postgresql/data/pgdata'
     ports:
-      - '{{ hackmd_db_cont_port }}:{{ hackmd_db_cont_port }}'
+      - '{{ codimd_db_cont_port }}:{{ codimd_db_cont_port }}'
     tmpfs:
       - '/run/postgresql:size=512K'
       - '/tmp:size=256K'
     volumes:
-      - '{{ hackmd_db_cont_vol }}/data:/var/lib/postgresql/data'
-      - '{{ hackmd_db_cont_vol }}/backup:/backup'
+      - '{{ codimd_db_cont_vol }}/data:/var/lib/postgresql/data'
+      - '{{ codimd_db_cont_vol }}/backup:/backup'
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "{{ hackmd_db_user }}"]
+      test: ["CMD", "pg_isready", "-U", "{{ codimd_db_user }}"]
       interval: 30s
       retries: 5

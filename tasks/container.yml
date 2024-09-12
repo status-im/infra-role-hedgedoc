@@ -1,31 +1,31 @@
 ---
-- name: HackMD | Create uploads directory file
+- name: CodiMD | Create uploads directory file
   file:
-    path: '{{ hackmd_app_cont_uploads }}'
+    path: '{{ codimd_app_cont_uploads }}'
     state: directory
-    owner: '{{ hackmd_app_host_uid }}'
+    owner: '{{ codimd_app_host_uid }}'
     group: docker
     recurse: true
 
-- name: HackMD | Create directory for DB data
+- name: CodiMD | Create directory for DB data
   file:
-    path: '{{ hackmd_db_cont_vol }}/data'
+    path: '{{ codimd_db_cont_vol }}/data'
     state: directory
-    owner: '{{ hackmd_db_host_uid }}'
+    owner: '{{ codimd_db_host_uid }}'
     group: dockremap
     recurse: true
 
-- name: HackMD | Create compose file
+- name: CodiMD | Create compose file
   template:
     src: 'docker-compose.yml.j2'
-    dest: '{{ hackmd_service_compose }}'
+    dest: '{{ codimd_service_compose }}'
     owner: 'dockremap'
     group: 'docker'
     mode: 0640
 
-- name: HackMD | Create containers
+- name: CodiMD | Create containers
   docker_compose:
-    project_src: '{{ hackmd_service_path }}'
+    project_src: '{{ codimd_service_path }}'
     pull: true
     build: false
     state: '{{ compose_state }}'

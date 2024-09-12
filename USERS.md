@@ -1,10 +1,10 @@
 # Description
 
-This file describes how users can be managed in HackMD.
+This file describes how users can be managed in CodiMD.
 
 # Types
 
-There are three types of user antries in HackMD PostgreSQL database `Users` table.
+There are three types of user antries in CodiMD PostgreSQL database `Users` table.
 
 * Registered users - When registration is open these update `email` field.
 * GitHub OAuth users - When logged in they fill `profile` with JSON from GH.
@@ -33,11 +33,11 @@ FROM (
     FROM "Users") AS u;
 ```
 ```
-          id           | provider |   username   |           name            |             email      
+          id           | provider |   username   |           name            |             email
 -----------------------+----------+--------------+---------------------------+------------------------
  19521990              | "github" | "jlokier"    | "Jamie Lokier"            | "jamie@shareable.org"
  2212681               | "github" | "jakubgs"    | "Jakub"                   | "jakub@gsokolowski.pl"
- 116095778576207530385 | "google" |              | "Jamie Lokier"            | 
+ 116095778576207530385 | "google" |              | "Jamie Lokier"            |
  5702426               | "github" | "Samyoul"    | "Samuel Hawksby-Robinson" | "samuel@samyoul.com"
  5483559               | "github" | "sachayves"  | "Sacha Saint-Leger"       | "sacha@ethereum.org"
  ...
