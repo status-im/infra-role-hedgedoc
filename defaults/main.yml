@@ -1,57 +1,57 @@
 ---
-codimd_domain: 'notes.example.org'
-codimd_service_name: 'codimd'
-codimd_service_path: '/docker/{{ codimd_service_name }}'
-codimd_service_compose: '{{ codimd_service_path }}/docker-compose.yml'
+hedgedoc_domain: 'notes.example.org'
+hedgedoc_service_name: 'hedgedoc'
+hedgedoc_service_path: '/docker/{{ hedgedoc_service_name }}'
+hedgedoc_service_compose: '{{ hedgedoc_service_path }}/docker-compose.yml'
 
 # Debug logs
-codimd_debug: false
+hedgedoc_debug: false
 
 # App --------------------------------------------------------------------------
-codimd_app_cont_name: '{{ codimd_service_name }}-app'
-codimd_app_cont_tag: '2.5.4'
-codimd_app_cont_image: 'hackmdio/hackmd:{{ codimd_app_cont_tag }}'
-codimd_app_cont_port: 3001
-codimd_app_cont_vol: '{{ codimd_service_path }}/app'
-codimd_app_cont_uploads: '{{ codimd_app_cont_vol }}/uploads'
-codimd_app_cont_uid: 1500
-codimd_app_host_uid: '{{ 100000 + codimd_app_cont_uid | int }}'
-codimd_session_life: '24h'
-# codimd_session_secret: 'changeMeIfYouCare'
+hedgedoc_app_cont_name: '{{ hedgedoc_service_name }}-app'
+hedgedoc_app_cont_tag: '1.10.3'
+hedgedoc_app_cont_image: 'quay.io/hedgedoc/hedgedoc:{{ hedgedoc_app_cont_tag }}'
+hedgedoc_app_cont_port: 3001
+hedgedoc_app_cont_vol: '{{ hedgedoc_service_path }}/app'
+hedgedoc_app_cont_uploads: '{{ hedgedoc_app_cont_vol }}/uploads'
+hedgedoc_app_cont_uid: 1500
+hedgedoc_app_host_uid: '{{ 100000 + hedgedoc_app_cont_uid | int }}'
+hedgedoc_session_life: '24h'
+# hedgedoc_session_secret: 'changeMeIfYouCare'
 
 # DB ---------------------------------------------------------------------------
-codimd_db_cont_name: '{{ codimd_service_name }}-db'
-codimd_db_cont_vol: '{{ codimd_service_path }}/db'
-codimd_db_cont_image: 'postgres:9.6-alpine'
-codimd_db_cont_port: 5432
-codimd_db_name: 'hackmd'
-codimd_db_user: 'hackmd'
-codimd_db_pass: 'changeMeIfYouCare'
-codimd_db_cont_uid: 70
-codimd_db_host_uid: '{{ 100000 + codimd_db_cont_uid | int }}'
+hedgedoc_db_cont_name: '{{ hedgedoc_service_name }}-db'
+hedgedoc_db_cont_vol: '{{ hedgedoc_service_path }}/db'
+hedgedoc_db_cont_image: 'postgres:9.6-alpine'
+hedgedoc_db_cont_port: 5432
+hedgedoc_db_name: 'hedgedoc'
+hedgedoc_db_user: 'hedgedoc'
+hedgedoc_db_pass: 'changeMeIfYouCare'
+hedgedoc_db_cont_uid: 70
+hedgedoc_db_host_uid: '{{ 100000 + hedgedoc_db_cont_uid | int }}'
 
 # Backups
-codimd_db_backup_service_name: 'dump-codimd-db'
-codimd_db_backup_frequency: daily
-codimd_db_backup_timeout: 120
-codimd_db_backup_user: root
+hedgedoc_db_backup_service_name: 'dump-hedgedoc-db'
+hedgedoc_db_backup_frequency: daily
+hedgedoc_db_backup_timeout: 120
+hedgedoc_db_backup_user: root
 
 # s3 or digital ocean uploads
 # WARNING: This is currently broken.
-codimd_s3_upload_enabled: false
-codimd_s3_access_key: ~
-codimd_s3_secret_key: ~
-codimd_s3_region: ~
-codimd_s3_bucket: ~
-codimd_s3_endpoint: ~
+hedgedoc_s3_upload_enabled: false
+hedgedoc_s3_access_key: ~
+hedgedoc_s3_secret_key: ~
+hedgedoc_s3_region: ~
+hedgedoc_s3_bucket: ~
+hedgedoc_s3_endpoint: ~
 
 # google oauth
-#codimd_gg_oauth_id: ~
-#codimd_gg_oauth_secret: ~
+#hedgedoc_gg_oauth_id: ~
+#hedgedoc_gg_oauth_secret: ~
 # github oauth
-#codimd_gh_oauth_id: ~
-#codimd_gh_oauth_secret: ~
-#codimd_gh_oauth_orgs: []
+#hedgedoc_gh_oauth_id: ~
+#hedgedoc_gh_oauth_secret: ~
+#hedgedoc_gh_oauth_orgs: []
 
 # general container management
 compose_recreate: 'auto'

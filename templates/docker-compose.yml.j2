@@ -1,22 +1,22 @@
 ---
 services:
   node:
-    container_name: '{{ codimd_app_cont_name }}'
-    image: '{{ codimd_app_cont_image }}'
+    container_name: '{{ hedgedoc_app_cont_name }}'
+    image: '{{ hedgedoc_app_cont_image }}'
     restart: always
     ports:
-      - '{{ codimd_app_cont_port }}:{{ codimd_app_cont_port }}'
+      - '{{ hedgedoc_app_cont_port }}:{{ hedgedoc_app_cont_port }}'
     volumes:
-      - '{{ codimd_app_cont_uploads }}:/home/hackmd/app/public/uploads'
+      - '{{ hedgedoc_app_cont_uploads }}:/home/hackmd/app/public/uploads'
     environment:
-      # WARNING: CodiMD expects lowercase string booleans!
-      DEBUG: '{{ codimd_debug | string | lower }}'
-      CMD_LOGLEVEL: '{{ codimd_debug | ternary("debug", "info") }}'
+      # WARNING: HedgeDoc expects lowercase string booleans!
+      DEBUG: '{{ hedgedoc_debug | string | lower }}'
+      CMD_LOGLEVEL: '{{ hedgedoc_debug | ternary("debug", "info") }}'
       # Fixes syntax highlighting issues for some languages
       CMD_USECDN: 'false'
-      CMD_PORT: '{{ codimd_app_cont_port }}'
-      CMD_DB_URL: 'postgres://{{ codimd_db_user }}:{{ codimd_db_pass }}@db:{{ codimd_db_cont_port }}/{{ codimd_db_name }}'
-      CMD_DOMAIN: '{{ codimd_domain }}'
+      CMD_PORT: '{{ hedgedoc_app_cont_port }}'
+      CMD_DB_URL: 'postgres://{{ hedgedoc_db_user }}:{{ hedgedoc_db_pass }}@db:{{ hedgedoc_db_cont_port }}/{{ hedgedoc_db_name }}'
+      CMD_DOMAIN: '{{ hedgedoc_domain }}'
       CMD_ALLOW_ORIGIN: 'localhost, status.im'
       CMD_URL_ADDPORT: 'false'
       CMD_PROTOCOL_USESSL: 'true'
@@ -28,55 +28,55 @@ services:
       CMD_ALLOW_ANONYMOUS: 'false'
       CMD_ALLOW_ANONYMOUS_EDITS: 'false'
       CMD_ALLOW_ANONYMOUS_VIEWS: 'true'
-      CMD_GOOGLE_CLIENTID: '{{ codimd_gg_oauth_id | mandatory }}'
-      CMD_GOOGLE_CLIENTSECRET: '{{ codimd_gg_oauth_secret | mandatory }}'
-      CMD_GITHUB_CLIENTID: '{{ codimd_gh_oauth_id | mandatory }}'
-      CMD_GITHUB_CLIENTSECRET: '{{ codimd_gh_oauth_secret | mandatory }}'
-      CMD_GITHUB_ORGANIZATIONS: '{{ codimd_gh_oauth_orgs | join(",") | mandatory }}'
-{% if codimd_s3_upload_enabled %}
+      CMD_GOOGLE_CLIENTID: '{{ hedgedoc_gg_oauth_id | mandatory }}'
+      CMD_GOOGLE_CLIENTSECRET: '{{ hedgedoc_gg_oauth_secret | mandatory }}'
+      CMD_GITHUB_CLIENTID: '{{ hedgedoc_gh_oauth_id | mandatory }}'
+      CMD_GITHUB_CLIENTSECRET: '{{ hedgedoc_gh_oauth_secret | mandatory }}'
+      CMD_GITHUB_ORGANIZATIONS: '{{ hedgedoc_gh_oauth_orgs | join(",") | mandatory }}'
+{% if hedgedoc_s3_upload_enabled %}
       # S3/DO Spaces uploads
       CMD_IMAGE_UPLOAD_TYPE: 's3'
-      CMD_S3_ACCESS_KEY_ID: '{{ codimd_s3_access_key }}'
-      CMD_S3_SECRET_ACCESS_KEY: '{{ codimd_s3_secret_key }}'
-      CMD_S3_REGION: '{{ codimd_s3_region }}'
-      CMD_S3_BUCKET: '{{ codimd_s3_bucket }}'
-      CMD_S3_ENDPOINT: '{{ codimd_s3_endpoint }}'
+      CMD_S3_ACCESS_KEY_ID: '{{ hedgedoc_s3_access_key }}'
+      CMD_S3_SECRET_ACCESS_KEY: '{{ hedgedoc_s3_secret_key }}'
+      CMD_S3_REGION: '{{ hedgedoc_s3_region }}'
+      CMD_S3_BUCKET: '{{ hedgedoc_s3_bucket }}'
+      CMD_S3_ENDPOINT: '{{ hedgedoc_s3_endpoint }}'
 {% else %}
       CMD_IMAGE_UPLOAD_TYPE: 'filesystem'
 {% endif %}
-      CMD_SESSION_LIFE: '{{ codimd_session_life | community.general.to_time_unit('ms') | int}}'
-{% if codimd_session_secret is defined and codimd_session_secret %}
-      CMD_SESSION_SECRET: '{{ codimd_session_secret }}'
+      CMD_SESSION_LIFE: '{{ hedgedoc_session_life | community.general.to_time_unit('ms') | int}}'
+{% if hedgedoc_session_secret is defined and hedgedoc_session_secret %}
+      CMD_SESSION_SECRET: '{{ hedgedoc_session_secret }}'
 {% endif %}
     depends_on:
       - 'db'
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:{{ codimd_app_cont_port }}/config"]
+      test: ["CMD", "wget", "-qO-", "http://localhost:{{ hedgedoc_app_cont_port }}/config"]
       interval: 30s
       timeout: 10s
       retries: 3
 
   db:
-    container_name: '{{ codimd_db_cont_name }}'
-    image: '{{ codimd_db_cont_image }}'
+    container_name: '{{ hedgedoc_db_cont_name }}'
+    image: '{{ hedgedoc_db_cont_image }}'
     restart: always
     environment:
-      POSTGRES_DB:       '{{ codimd_db_name }}'
-      POSTGRES_USER:     '{{ codimd_db_user }}'
-      POSTGRES_PASSWORD: '{{ codimd_db_pass }}'
+      POSTGRES_DB:       '{{ hedgedoc_db_name }}'
+      POSTGRES_USER:     '{{ hedgedoc_db_user }}'
+      POSTGRES_PASSWORD: '{{ hedgedoc_db_pass }}'
       # This fixes chmod errors on DB startup due to volume + userns-remap
       PGDATA: '/var/lib/postgresql/data/pgdata'
     command: |
-      -p {{ codimd_db_cont_port }}
+      -p {{ hedgedoc_db_cont_port }}
     ports:
-      - '{{ codimd_db_cont_port }}:{{ codimd_db_cont_port }}'
+      - '{{ hedgedoc_db_cont_port }}:{{ hedgedoc_db_cont_port }}'
     tmpfs:
       - '/run/postgresql:size=512K'
       - '/tmp:size=256K'
     volumes:
-      - '{{ codimd_db_cont_vol }}/data:/var/lib/postgresql/data'
-      - '{{ codimd_db_cont_vol }}/backup:/backup'
+      - '{{ hedgedoc_db_cont_vol }}/data:/var/lib/postgresql/data'
+      - '{{ hedgedoc_db_cont_vol }}/backup:/backup'
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "{{ codimd_db_user }}"]
+      test: ["CMD", "pg_isready", "-U", "{{ hedgedoc_db_user }}"]
       interval: 30s
       retries: 5

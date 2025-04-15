@@ -1,20 +1,20 @@
 ---
-- name: CodiMD | Configure nginx proxy
+- name: HedgeDoc | Configure nginx proxy
   include_role: name=infra-role-nginx
   vars:
     nginx_configs:
-      codimd_rate_limiting:
+      hedgedoc_rate_limiting:
         # Limit requests to 40 per minute based on IP
-        - limit_req_zone $binary_remote_addr zone=codimd_by_ip:20m rate=40r/m
+        - limit_req_zone $binary_remote_addr zone=hedgedoc_by_ip:20m rate=40r/m
     nginx_sites:
-      codimd_http:
+      hedgedoc_http:
         - listen 80
-        - server_name {{ codimd_domain }}
-        - return 301 https://{{ codimd_domain }}$request_uri
+        - server_name {{ hedgedoc_domain }}
+        - return 301 https://{{ hedgedoc_domain }}$request_uri
 
-      codimd_ssl:
+      hedgedoc_ssl:
         - listen 443 ssl
-        - server_name {{ codimd_domain }}
+        - server_name {{ hedgedoc_domain }}
 
         - ssl_certificate     /certs/origin.crt
         - ssl_certificate_key /certs/origin.key
@@ -23,8 +23,8 @@
 
         # Script kiddies like scanning paths, so we rate limit most.
         - location / {
-            limit_req zone=codimd_by_ip burst=30 nodelay;
-            proxy_pass http://localhost:{{ codimd_app_cont_port }}/;
+            limit_req zone=hedgedoc_by_ip burst=30 nodelay;
+            proxy_pass http://localhost:{{ hedgedoc_app_cont_port }}/;
             proxy_set_header X-NginX-Proxy true;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
@@ -35,7 +35,7 @@
 
         # This path is used when editing so we can't rate limit it easily.
         - location ~ ^/(socket.io|config|me) {
-            proxy_pass http://localhost:{{ codimd_app_cont_port }};
+            proxy_pass http://localhost:{{ hedgedoc_app_cont_port }};
             proxy_set_header X-NginX-Proxy true;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;

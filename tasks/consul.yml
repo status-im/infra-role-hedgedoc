@@ -1,15 +1,15 @@
 ---
-- name: CodiMD | Create Consul service definition
+- name: HedgeDoc | Create Consul service definition
   include_role: name=infra-role-consul-service
   vars:
-    consul_config_name: '{{ codimd_service_name }}'
+    consul_config_name: '{{ hedgedoc_service_name }}'
     consul_services:
-      - name: '{{ codimd_service_name }}'
-        tags: ['codimd', 'notes', 'misc']
+      - name: '{{ hedgedoc_service_name }}'
+        tags: ['hedgedoc', 'notes', 'misc']
         # we advertise the port with basic auth
-        port: '{{ codimd_app_cont_port }}'
+        port: '{{ hedgedoc_app_cont_port }}'
         checks:
-          - id: '{{ codimd_service_name }}-status'
-            name: CodiMD Healthcheck
-            type: http
-            http: 'http://localhost:{{ codimd_app_cont_port }}/config'
+          - id: '{{ hedgedoc_service_name }}-status'
+            name: 'HedgeDoc Healthcheck'
+            type: 'http'
+            http: 'http://localhost:{{ hedgedoc_app_cont_port }}/config'

@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Jakub Sokołowski
-  description: Deploy CodiMD markdown collaboration platform
+  description: Deploy HedgeDoc markdown collaboration platform
   company: Status.im
   license: MIT
   min_ansible_version: 2.2

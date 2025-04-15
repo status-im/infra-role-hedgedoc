@@ -1,10 +1,10 @@
 # Description
 
-This file describes how users can be managed in CodiMD.
+This file describes how users can be managed in HedgeDoc.
 
 # Types
 
-There are three types of user antries in CodiMD PostgreSQL database `Users` table.
+There are three types of user antries in HedgeDoc PostgreSQL database `Users` table.
 
 * Registered users - When registration is open these update `email` field.
 * GitHub OAuth users - When logged in they fill `profile` with JSON from GH.

@@ -1,31 +1,31 @@
 ---
-- name: CodiMD | Create uploads directory file
+- name: HedgeDoc | Create uploads directory file
   file:
-    path: '{{ codimd_app_cont_uploads }}'
+    path: '{{ hedgedoc_app_cont_uploads }}'
     state: directory
-    owner: '{{ codimd_app_host_uid }}'
+    owner: '{{ hedgedoc_app_host_uid }}'
     group: docker
     recurse: true
 
-- name: CodiMD | Create directory for DB data
+- name: HedgeDoc | Create directory for DB data
   file:
-    path: '{{ codimd_db_cont_vol }}/data'
+    path: '{{ hedgedoc_db_cont_vol }}/data'
     state: directory
-    owner: '{{ codimd_db_host_uid }}'
+    owner: '{{ hedgedoc_db_host_uid }}'
     group: dockremap
     recurse: true
 
-- name: CodiMD | Create compose file
+- name: HedgeDoc | Create compose file
   template:
     src: 'docker-compose.yml.j2'
-    dest: '{{ codimd_service_compose }}'
+    dest: '{{ hedgedoc_service_compose }}'
     owner: 'dockremap'
     group: 'docker'
     mode: 0640
 
-- name: CodiMD | Create containers
+- name: HedgeDoc | Create containers
   community.docker.docker_compose_v2:
-    project_src: '{{ codimd_service_path }}'
+    project_src: '{{ hedgedoc_service_path }}'
     recreate:    '{{ compose_recreate }}'
     pull:        '{{ compose_pull }}'
     state:       '{{ compose_state }}'

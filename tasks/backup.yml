@@ -1,22 +1,22 @@
 ---
-- name: 'Create timer for MongoDB backup: {{ codimd_db_backup_service_name }}'
+- name: 'Create timer for MongoDB backup: {{ hedgedoc_db_backup_service_name }}'
   include_role: name=infra-role-systemd-timer
   vars:
-    systemd_timer_name: '{{ codimd_db_backup_service_name }}'
-    systemd_timer_description: 'Dump CodiMD PostgreSQL database.'
-    systemd_timer_user: '{{ codimd_db_backup_user }}'
-    systemd_timer_frequency: '{{ codimd_db_backup_frequency }}'
-    systemd_timer_timeout_sec: '{{ codimd_db_backup_timeout }}'
+    systemd_timer_name: '{{ hedgedoc_db_backup_service_name }}'
+    systemd_timer_description: 'Dump HedgeDoc PostgreSQL database.'
+    systemd_timer_user: '{{ hedgedoc_db_backup_user }}'
+    systemd_timer_frequency: '{{ hedgedoc_db_backup_frequency }}'
+    systemd_timer_timeout_sec: '{{ hedgedoc_db_backup_timeout }}'
     systemd_timer_after_extra: 'docker.service'
     systemd_timer_start_on_creation: false
     systemd_timer_script_content: |
       #!/usr/bin/env bash
-      BKP_DIR="{{ codimd_db_cont_vol }}/backup/{{ codimd_db_name }}"
+      BKP_DIR="{{ hedgedoc_db_cont_vol }}/backup/{{ hedgedoc_db_name }}"
       rm -vfr "${BKP_DIR}"
-      /usr/bin/docker exec -i {{ codimd_db_cont_name }} \
+      /usr/bin/docker exec -i {{ hedgedoc_db_cont_name }} \
         pg_dump \
           -F directory \
-          -f "/backup/{{ codimd_db_name }}" \
-          -p {{ codimd_db_cont_port }} \
-          -U {{ codimd_db_user }} {{ codimd_db_name }}
+          -f "/backup/{{ hedgedoc_db_name }}" \
+          -p {{ hedgedoc_db_cont_port }} \
+          -U {{ hedgedoc_db_user }} {{ hedgedoc_db_name }}
       chmod 750 -R "${BKP_DIR}"
