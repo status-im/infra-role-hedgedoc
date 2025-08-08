@@ -1,20 +1,4 @@
 ---
-- name: HedgeDoc | Create uploads directory file
-  file:
-    path: '{{ hedgedoc_app_cont_uploads }}'
-    state: directory
-    owner: '{{ hedgedoc_app_host_uid }}'
-    group: docker
-    recurse: true
-
-- name: HedgeDoc | Create directory for DB data
-  file:
-    path: '{{ hedgedoc_db_cont_vol }}/data'
-    state: directory
-    owner: '{{ hedgedoc_db_host_uid }}'
-    group: dockremap
-    recurse: true
-
 - name: HedgeDoc | Create compose file
   template:
     src: 'docker-compose.yml.j2'

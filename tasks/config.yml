@@ -1,0 +1,32 @@
+---
+- name: HedgeDoc | Create uploads directory file
+  file:
+    path: '{{ hedgedoc_app_cont_uploads }}'
+    state: directory
+    owner: '{{ hedgedoc_app_host_uid }}'
+    group: docker
+    recurse: true
+
+- name: HedgeDoc | Create directory for DB data
+  file:
+    path: '{{ hedgedoc_db_cont_vol }}/data'
+    state: directory
+    owner: '{{ hedgedoc_db_host_uid }}'
+    group: dockremap
+    recurse: true
+
+- name: HedgeDoc | Admin PSQL config file
+  template:
+    src:   'psql.env.j2'
+    dest:  '{{ hedgedoc_service_path }}/.psql.env'
+    owner: 'root'
+    group: 'adm'
+    mode: 0640
+
+- name: HedgeDoc | Admin PSQL wrapper script
+  template:
+    src:   'admin.sh.j2'
+    dest:  '{{ hedgedoc_service_path }}/admin.sh'
+    owner: 'root'
+    group: 'adm'
+    mode: 0750
