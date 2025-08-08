@@ -29,28 +29,6 @@ fd7bf9523578        hedgedoc-db           postgres:9.6-alpine       15 seconds a
 ```
 For user management you can see the [`USERS.md`](./USERS.md) document.
 
-# Backups
+# Backup & Restore
 
-Backups are done via a [systemd timer](https://www.freedesktop.org/software/systemd/man/systemd.timer.html) and [`mongodump`](https://docs.mongodb.com/manual/reference/program/mongodump/):
-```
- > sudo systemctl list-timers '*-hedgedoc-db.timer'
-NEXT                         LEFT    LAST PASSED UNIT                   ACTIVATES
-Sat 2020-01-25 00:00:00 UTC  7h left n/a  n/a    backup-hedgedoc-db.timer backup-hedgedoc-db.service
-Sat 2020-01-25 00:00:00 UTC  7h left n/a  n/a    dump-hedgedoc-db.timer   dump-hedgedoc-db.service
-```
-You can create an SQL backup of the PostgreSQL database by running:
-```
- > sudo systemctl start dump-hedgedoc-db.service
- > sudo systemctl status dump-hedgedoc-db.service
-● dump-hedgedoc-db.service - Dump HedgeDoc PostgreSQL database.
-     Loaded: loaded (/etc/systemd/system/dump-hedgedoc-db.service; static; vendor preset: enabled)
-     Active: inactive (dead) since Thu 2021-03-04 19:39:15 UTC; 7s ago
-TriggeredBy: ● dump-hedgedoc-db.timer
-       Docs: https://github.com/status-im/infra-role-systemd-timer
-    Process: 867920 ExecStart=/usr/local/bin/dump-hedgedoc-db (code=exited, status=0/SUCCESS)
-   Main PID: 867920 (code=exited, status=0/SUCCESS)
-
-systemd[1]: Starting Dump HedgeDoc PostgreSQL database....
-systemd[1]: dump-hedgedoc-db.service: Succeeded.
-systemd[1]: Finished Dump HedgeDoc PostgreSQL database..
-```
+See [BACKUP.md](./BACKUP.md) doc.
