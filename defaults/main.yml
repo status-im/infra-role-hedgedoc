@@ -22,7 +22,7 @@ hedgedoc_session_life: '24h'
 # DB ---------------------------------------------------------------------------
 hedgedoc_db_cont_name: '{{ hedgedoc_service_name }}-db'
 hedgedoc_db_cont_vol: '{{ hedgedoc_service_path }}/db'
-hedgedoc_db_cont_image: 'postgres:9.6-alpine'
+hedgedoc_db_cont_image: 'postgres:13.21-alpine3.22'
 hedgedoc_db_cont_port: 5432
 hedgedoc_db_name: 'hedgedoc'
 hedgedoc_db_user: 'hedgedoc'
