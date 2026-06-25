@@ -12,10 +12,11 @@ hedgedoc_default_permission: 'limited'
 hedgedoc_allow_anonymous: false
 hedgedoc_allow_anonymous_edits: false
 hedgedoc_allow_anonymous_views: true
+hedgedoc_enable_uploads: 'registered' # registered, all, none
 
 # App --------------------------------------------------------------------------
 hedgedoc_app_cont_name: '{{ hedgedoc_service_name }}-app'
-hedgedoc_app_cont_tag: '1.10.3'
+hedgedoc_app_cont_tag: '1.11.0'
 hedgedoc_app_cont_image: 'quay.io/hedgedoc/hedgedoc:{{ hedgedoc_app_cont_tag }}'
 hedgedoc_app_cont_port: 3001
 hedgedoc_app_cont_vol: '{{ hedgedoc_service_path }}/app'

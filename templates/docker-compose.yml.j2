@@ -24,6 +24,7 @@ services:
       CMD_ALLOW_EMAIL_REGISTER: 'false'
       CMD_ALLOW_FREEURL: 'true'
       CMD_ALLOW_PDF_EXPORT: 'true'
+      CMD_ENABLE_UPLOADS: '{{ hedgedoc_enable_uploads }}'
       CMD_DEFAULT_PERMISSION: '{{ hedgedoc_default_permission }}'
       CMD_ALLOW_ANONYMOUS: '{{ hedgedoc_allow_anonymous | to_json }}'
       CMD_ALLOW_ANONYMOUS_EDITS: '{{ hedgedoc_allow_anonymous_edits | to_json }}'
