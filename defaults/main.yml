@@ -7,6 +7,12 @@ hedgedoc_service_compose: '{{ hedgedoc_service_path }}/docker-compose.yml'
 # Debug logs
 hedgedoc_debug: false
 
+# Permissions
+hedgedoc_default_permission: 'limited'
+hedgedoc_allow_anonymous: false
+hedgedoc_allow_anonymous_edits: false
+hedgedoc_allow_anonymous_views: true
+
 # App --------------------------------------------------------------------------
 hedgedoc_app_cont_name: '{{ hedgedoc_service_name }}-app'
 hedgedoc_app_cont_tag: '1.10.3'
